@@ -26,5 +26,10 @@ public interface TrackService {
      */
     public void deleteTrackById(int id);
 
+    /**
+     * AbstractMethod to delete all tracks
+     */
+    public void deleteAllTracks();
+
 
 }

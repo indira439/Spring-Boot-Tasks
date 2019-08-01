@@ -63,5 +63,11 @@ public class TrackController {
         return new ResponseEntity<List<Track>>(trackService.getAllTracks(),HttpStatus.FOUND);
     }
 
+    @DeleteMapping("track")
+    public ResponseEntity<?> deleteAllTracks() {
+        trackService.deleteAllTracks();
+        return new ResponseEntity<List<Track>>(trackService.getAllTracks(),HttpStatus.FOUND);
+    }
+
 
 }

@@ -56,4 +56,12 @@ public class TrackServiceImplements implements TrackService {
     public void deleteTrackById(int id) {
         trackRepository.deleteById(id);
     }
+
+    /**
+     * Implementation of deleteAllTracks method
+     */
+    @Override
+    public void deleteAllTracks() {
+        trackRepository.deleteAll();
+    }
 }
