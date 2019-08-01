@@ -28,4 +28,13 @@ public class TrackController {
         return new ResponseEntity<>(savedTrack, HttpStatus.ACCEPTED);
     }
 
+    /**GetMapping Annotation for mapping HTTP GET requests onto specific handler methods. */
+    @GetMapping("track/{id}")
+    public ResponseEntity<?> getTrackById(@PathVariable int id) {
+        Track retrieveTrackById = trackService.getTrackById(id);
+        return new ResponseEntity<>(retrieveTrackById, HttpStatus.FOUND);
+    }
+
+
+
 }

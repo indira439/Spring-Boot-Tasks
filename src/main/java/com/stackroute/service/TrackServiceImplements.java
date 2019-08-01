@@ -23,4 +23,11 @@ public class TrackServiceImplements implements TrackService {
         Track saveTrack = trackRepository.save(track);
         return saveTrack;
     }
+
+    /**Implementation of getTrackById method*/
+    @Override
+    public Track getTrackById(int id) {
+        Track getTrackById = trackRepository.findById(id).get();
+        return getTrackById;
+    }
 }
