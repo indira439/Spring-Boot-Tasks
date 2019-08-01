@@ -6,13 +6,25 @@ import java.util.List;
 
 public interface TrackService {
 
-    /**AbstractMethod to save a track*/
+    /**
+     * AbstractMethod to save a track
+     */
     public Track saveTrack(Track track);
 
-    /**AbstractMethod to get a track by Id*/
+    /**
+     * AbstractMethod to get a track by Id
+     */
     public Track getTrackById(int id);
 
-    /**AbstractMethod to get all tracks*/
+    /**
+     * AbstractMethod to get all tracks
+     */
     public List<Track> getAllTracks();
+
+    /**
+     * AbstractMethod to delete track by Id
+     */
+    public void deleteTrackById(int id);
+
 
 }
