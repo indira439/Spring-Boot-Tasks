@@ -12,26 +12,26 @@ d. Remove track.
 ## Project Structure
 
 
-src
-├───main
-│   ├───java
-│   │   └───com
-│   │       └───stackroute
-│   │           │   TrackServiceApplication.java
-│   │           ├───controller
-│   │           │       TrackController.java
-│   │           ├───domain
-│   │           │       Track.java
-│   │           ├───repository
-│   │           │       TrackRepository.java
-│   │           └───service
-│   │                   TrackService.java
-│   │                   TrackServiceImplements.java
-│   └───resources
-│       │   application.properties
-│ 
-└───test
-    └───java
+            src
+            ├───main
+            │   ├───java
+            │   │   └───com
+            │   │       └───stackroute
+            │   │           │   TrackServiceApplication.java
+            │   │           ├───controller
+            │   │           │       TrackController.java
+            │   │           ├───domain
+            │   │           │       Track.java
+            │   │           ├───repository
+            │   │           │       TrackRepository.java
+            │   │           └───service
+            │   │                   TrackService.java
+            │   │                   TrackServiceImplements.java
+            │   └───resources
+            │       │   application.properties
+            │ 
+            └───test
+                └───java
 
---pom.xml
+            --pom.xml
 
