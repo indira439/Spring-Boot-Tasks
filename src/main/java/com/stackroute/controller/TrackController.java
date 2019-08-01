@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**RestController annotation is used to create Restful web services using Spring MVC. */
 @RestController
 /**RequestMapping annotation maps HTTP requests to handler methods*/
@@ -34,6 +36,14 @@ public class TrackController {
         Track retrieveTrackById = trackService.getTrackById(id);
         return new ResponseEntity<>(retrieveTrackById, HttpStatus.FOUND);
     }
+
+    @GetMapping("track")
+    public ResponseEntity<?> getAllTracks() {
+        List<Track> retrieveTracks = trackService.getAllTracks();
+        return new ResponseEntity<>(retrieveTracks, HttpStatus.FOUND);
+    }
+
+
 
 
 
