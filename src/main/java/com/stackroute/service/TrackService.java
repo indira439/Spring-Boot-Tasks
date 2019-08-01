@@ -31,5 +31,10 @@ public interface TrackService {
      */
     public void deleteAllTracks();
 
+    /**
+     * AbstractMethod to update comments of a track by its id
+     */
+    public Track updateTrackById(int id, Track track);
+
 
 }

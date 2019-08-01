@@ -69,5 +69,14 @@ public class TrackController {
         return new ResponseEntity<List<Track>>(trackService.getAllTracks(),HttpStatus.FOUND);
     }
 
+    /**
+     * PutMapping Annotation for mapping HTTP PuT requests onto specific handler methods.
+     */
+    @PutMapping("track/{id}")
+    public ResponseEntity<?> UpdateTrackById(@PathVariable int id, @RequestBody Track track) {
+        Track updatedTrack = trackService.updateTrackById(id, track);
+        return new ResponseEntity<>(updatedTrack, HttpStatus.ACCEPTED);
+    }
+
 
 }

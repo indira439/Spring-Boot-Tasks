@@ -28,8 +28,8 @@ public class TrackServiceImplements implements TrackService {
      */
     @Override
     public Track saveTrack(Track track) {
-        Track saveTrack = trackRepository.save(track);
-        return saveTrack;
+        Track savedTrack = trackRepository.save(track);
+        return savedTrack;
     }
 
     /**
@@ -37,8 +37,8 @@ public class TrackServiceImplements implements TrackService {
      */
     @Override
     public Track getTrackById(int id) {
-        Track getTrackById = trackRepository.findById(id).get();
-        return getTrackById;
+        Track retrieveTrackById = trackRepository.findById(id).get();
+        return retrieveTrackById;
     }
 
     /**
@@ -63,5 +63,15 @@ public class TrackServiceImplements implements TrackService {
     @Override
     public void deleteAllTracks() {
         trackRepository.deleteAll();
+    }
+
+    /**
+     * Implementation of updateTrack method
+     */
+    @Override
+    public Track updateTrackById(int id, Track track) {
+        Track getTrack = trackRepository.findById(id).get();
+        getTrack.setComments(track.getComments());
+        return trackRepository.save(getTrack);
     }
 }
