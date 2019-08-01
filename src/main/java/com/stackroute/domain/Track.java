@@ -10,16 +10,16 @@ public class Track {
 
     }
 
-    public Track(int id, String name, String comments) {
+    public Track(int id, String trackName, String comments) {
         this.id = id;
-        this.name = name;
+        this.trackName = trackName;
         this.comments = comments;
     }
 
     /**Id annotation make id variable as Primary key*/
     @Id
     private int id;
-    private String name;
+    private String trackName;
     private String comments;
 
     public int getId() {
@@ -30,12 +30,12 @@ public class Track {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTrackName() {
+        return trackName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
     }
 
     public String getComments() {
