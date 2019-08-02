@@ -118,7 +118,7 @@ public class TrackController {
         return responseEntity;
     }
 
-    @GetMapping("track/search/{trackName}")
+    @GetMapping("tracks/{trackName}")
     public ResponseEntity<?> getTrackByName(@PathVariable String trackName) {
         ResponseEntity responseEntity;
         try {
