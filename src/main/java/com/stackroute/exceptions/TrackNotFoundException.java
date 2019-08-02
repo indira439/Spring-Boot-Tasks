@@ -3,7 +3,7 @@ package com.stackroute.exceptions;
 /**
  * Custom Exception to throw if track is not found
  */
-public class TrackNotFoundException {
+public class TrackNotFoundException extends Exception{
     private String message;
 
     public TrackNotFoundException() {
@@ -11,6 +11,7 @@ public class TrackNotFoundException {
 
 
     public TrackNotFoundException(String message) {
+        super(message);
         this.message = message;
     }
 }

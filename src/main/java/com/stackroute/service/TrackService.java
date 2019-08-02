@@ -2,6 +2,7 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface TrackService {
     /**
      * AbstractMethod to get a track by Id
      */
-    public Track getTrackById(int id);
+    public Track getTrackById(int id) throws TrackNotFoundException;
 
     /**
      * AbstractMethod to get all tracks
