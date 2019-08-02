@@ -26,7 +26,7 @@ public interface TrackService {
     /**
      * AbstractMethod to delete track by Id
      */
-    public void deleteTrackById(int id);
+    public void deleteTrackById(int id) throws TrackNotFoundException;
 
     /**
      * AbstractMethod to delete all tracks

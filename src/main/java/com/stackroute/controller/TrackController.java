@@ -56,6 +56,7 @@ public class TrackController {
     @GetMapping("track/{id}")
     public ResponseEntity<?> getTrackById(@PathVariable int id) {
         ResponseEntity responseEntity;
+        /**Try this block of code else catch the exception*/
         try {
             Track retrieveTrackById = trackService.getTrackById(id);
             responseEntity = new ResponseEntity<>(retrieveTrackById, HttpStatus.FOUND);
@@ -69,7 +70,7 @@ public class TrackController {
     @GetMapping("track")
     public ResponseEntity<?> getAllTracks() {
         ResponseEntity responseEntity;
-
+        /**Try this block of code else catch the exception*/
         try {
             List<Track> retrieveTracks = trackService.getAllTracks();
             responseEntity = new ResponseEntity<>(retrieveTracks, HttpStatus.FOUND);
@@ -88,7 +89,7 @@ public class TrackController {
         try {
             trackService.deleteTrackById(id);
             responseEntity = new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
-        } catch (Exception exception) {
+        } catch (TrackNotFoundException exception) {
             responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
         return responseEntity;

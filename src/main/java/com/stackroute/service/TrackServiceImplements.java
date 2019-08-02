@@ -46,12 +46,12 @@ public class TrackServiceImplements implements TrackService {
      */
     @Override
     public Track getTrackById(int id) throws TrackNotFoundException {
-        /**Throw TrackNotFoundException if track is not found*/
+        /**Throw TrackNotFoundException if track we want to get is not found*/
         if (trackRepository.existsById(id)) {
             Track retrieveTrackById = trackRepository.findById(id).get();
             return retrieveTrackById;
         } else {
-            throw new TrackNotFoundException("Track not found");
+            throw new TrackNotFoundException("Track for this id is not found");
         }
     }
 
@@ -67,8 +67,13 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of deleteTrackById method
      */
     @Override
-    public void deleteTrackById(int id) {
-        trackRepository.deleteById(id);
+    public void deleteTrackById(int id) throws TrackNotFoundException {
+        /**Throw TrackNotFoundException if track we want to delete is not found*/
+        if (trackRepository.existsById(id)) {
+            trackRepository.deleteById(id);
+        } else {
+            throw new TrackNotFoundException("Track for this id is not found");
+        }
     }
 
     /**
