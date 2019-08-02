@@ -17,6 +17,6 @@ public interface TrackRepository extends JpaRepository<Track, Integer> {
     /**
      * Using @Query parameter to fetch data from database
      */
-    @Query(value = "SELECT t FROM Track t WHERE t.trackName like ?1")
+    @Query(value = "SELECT t FROM Track t WHERE t.trackName like %?1%")
     public List<Track> findByName(String trackName);
 }
