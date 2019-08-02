@@ -65,6 +65,7 @@ public class TrackServiceImplements implements TrackService {
         trackRepository.deleteAll();
     }
 
+
     /**
      * Implementation of updateTrack method
      */
@@ -74,4 +75,14 @@ public class TrackServiceImplements implements TrackService {
         getTrack.setComments(track.getComments());
         return trackRepository.save(getTrack);
     }
+
+    /**
+     * Implementation of getTrackByName method
+     */
+    @Override
+    public List<Track> getTrackByName(String trackName) {
+        return trackRepository.findByName(trackName);
+    }
+
+
 }

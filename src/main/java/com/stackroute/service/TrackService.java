@@ -36,5 +36,9 @@ public interface TrackService {
      */
     public Track updateTrackById(int id, Track track);
 
+    /**
+     * AbstractMethod to get track by Name
+     */
+    public List<Track> getTrackByName(String trackName);
 
 }
