@@ -36,11 +36,11 @@ public interface TrackService {
     /**
      * AbstractMethod to update comments of a track by its id
      */
-    public Track updateTrackById(int id, Track track);
+    public Track updateTrackById(int id, Track track) throws TrackNotFoundException;
 
     /**
      * AbstractMethod to get track by Name
      */
-    public List<Track> getTrackByName(String trackName);
+    public List<Track> getTrackByName(String trackName) throws TrackNotFoundException;
 
 }

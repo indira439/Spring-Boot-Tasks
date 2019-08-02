@@ -51,7 +51,7 @@ public class TrackServiceImplements implements TrackService {
             Track retrieveTrackById = trackRepository.findById(id).get();
             return retrieveTrackById;
         } else {
-            throw new TrackNotFoundException("Track for this id is not found");
+            throw new TrackNotFoundException("Track you want to get is not found");
         }
     }
 
@@ -72,7 +72,7 @@ public class TrackServiceImplements implements TrackService {
         if (trackRepository.existsById(id)) {
             trackRepository.deleteById(id);
         } else {
-            throw new TrackNotFoundException("Track for this id is not found");
+            throw new TrackNotFoundException("Track you want to delete is not found");
         }
     }
 
@@ -89,17 +89,26 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of updateTrack method
      */
     @Override
-    public Track updateTrackById(int id, Track track) {
-        Track getTrack = trackRepository.findById(id).get();
-        getTrack.setComments(track.getComments());
-        return trackRepository.save(getTrack);
+    public Track updateTrackById(int id, Track track) throws TrackNotFoundException {
+        /**Throw TrackNotFoundException if track we want to update is not found*/
+        if (trackRepository.existsById(id)) {
+            Track getTrack = trackRepository.findById(id).get();
+            getTrack.setComments(track.getComments());
+            return trackRepository.save(getTrack);
+        } else {
+            throw new TrackNotFoundException("Track you want to update is not found");
+        }
     }
 
     /**
      * Implementation of getTrackByName method
      */
     @Override
-    public List<Track> getTrackByName(String trackName) {
+    public List<Track> getTrackByName(String trackName) throws TrackNotFoundException {
+        /**Throw TrackNotFoundException if track we want to get is not found*/
+        if (trackRepository.findByName(trackName).isEmpty()) {
+            throw new TrackNotFoundException("Track you want to get is not found");
+        }
         return trackRepository.findByName(trackName);
     }
 

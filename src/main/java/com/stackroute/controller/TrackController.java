@@ -86,6 +86,7 @@ public class TrackController {
     @DeleteMapping("track/{id}")
     public ResponseEntity<?> deleteTrackById(@PathVariable int id) {
         ResponseEntity responseEntity;
+        /**Try this block of code else catch the exception*/
         try {
             trackService.deleteTrackById(id);
             responseEntity = new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
@@ -98,12 +99,12 @@ public class TrackController {
     @DeleteMapping("track")
     public ResponseEntity<?> deleteAllTracks() {
         ResponseEntity responseEntity;
-
+        /**Try this block of code else catch the exception*/
         try {
             trackService.deleteAllTracks();
             return new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
         } catch (Exception exception) {
-            responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.NO_CONTENT);
+            responseEntity = new ResponseEntity<>("No tracks to delete", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
@@ -114,12 +115,12 @@ public class TrackController {
     @PutMapping("track/{id}")
     public ResponseEntity<?> UpdateTrackById(@PathVariable int id, @RequestBody Track track) {
         ResponseEntity responseEntity;
-
+        /**Try this block of code else catch the exception*/
         try {
             Track updatedTrack = trackService.updateTrackById(id, track);
             return new ResponseEntity<>(updatedTrack, HttpStatus.ACCEPTED);
-        } catch (Exception exception) {
-            responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_MODIFIED);
+        } catch (TrackNotFoundException exception) {
+            responseEntity = new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
         return responseEntity;
     }
