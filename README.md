@@ -1,2 +1,3 @@
-## Task4
-Generated API documentation using Swagger 2
+## Task5
+Created custom exceptions TrackNotFoundException, TrackAlreadyExistsException in a
+com.stackroute.exceptions package.

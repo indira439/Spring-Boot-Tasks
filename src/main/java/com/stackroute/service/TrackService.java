@@ -1,6 +1,7 @@
 package com.stackroute.service;
 
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.TrackAlreadyExistsException;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface TrackService {
     /**
      * AbstractMethod to save a track
      */
-    public Track saveTrack(Track track);
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException;
 
     /**
      * AbstractMethod to get a track by Id
