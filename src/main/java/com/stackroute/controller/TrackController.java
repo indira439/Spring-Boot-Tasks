@@ -23,12 +23,13 @@ import java.util.List;
 @RequestMapping(value = "api/v1")
 public class TrackController {
 
+    @Autowired
     public TrackService trackService;
 
     /**
      * Constructor based Dependency injection to inject TrackService into controller
      */
-    @Autowired
+
     public TrackController(TrackService trackService) {
         this.trackService = trackService;
     }
@@ -90,7 +91,7 @@ public class TrackController {
     }
 
     @GetMapping("track/search/{trackName}")
-    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws TrackNotFoundException{
+    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws TrackNotFoundException {
 
         List<Track> retrieveTrackByNAme = trackService.getTrackByName(trackName);
         return new ResponseEntity<>(retrieveTrackByNAme, HttpStatus.FOUND);

@@ -5,6 +5,7 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
  * @Service indicates annotated class is a service which hold business logic in the Service layer
  */
 @Service
+/**@Primary Indicates that a particular bean should be given preference when multiple beans to be auto wired to a single-valued dependency. */
+@Primary
 public class TrackServiceImplements implements TrackService {
 
     private TrackRepository trackRepository;
