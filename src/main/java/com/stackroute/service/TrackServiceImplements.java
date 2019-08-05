@@ -5,7 +5,6 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -109,10 +108,10 @@ public class TrackServiceImplements implements TrackService {
     @Override
     public List<Track> getTrackByName(String trackName) throws TrackNotFoundException {
         /**Throw TrackNotFoundException if track we want to get is not found*/
-        if (trackRepository.findByName(trackName).isEmpty()) {
+        if (trackRepository.findBytrackName(trackName).isEmpty()) {
             throw new TrackNotFoundException("Track you want to get is not found");
         }
-        return trackRepository.findByName(trackName);
+        return trackRepository.findBytrackName(trackName);
     }
 
 

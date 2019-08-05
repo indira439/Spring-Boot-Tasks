@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+//
+//import javax.persistence.Entity;
+//import javax.persistence.Id;
 
 /**Entity annotated class will have the ability to represent objects in the database*/
-@Entity
+@Document(collection = "tracks")
 
 /**With @Data, Lombok will generate getter and setter methods, toString methods, Equal & Hashcode methods*/
 @Data
