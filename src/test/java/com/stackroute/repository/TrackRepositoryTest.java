@@ -23,12 +23,20 @@ import java.util.List;
 @DataMongoTest
 public class TrackRepositoryTest {
 
+    /**
+     * Used AutoWire by property to inject TrackRepository here
+     */
     @Autowired
     private TrackRepository trackRepository;
     private Track track;
 
+
+    /**
+     * Execute this before each test case
+     */
     @Before
     public void setUp() {
+        //Add new track by setter methods
         track = new Track();
         track.setId(1);
         track.setTrackName("Music track1");
@@ -36,9 +44,12 @@ public class TrackRepositoryTest {
 
     }
 
+    /**
+     * Execute this after every test case
+     */
     @After
     public void tearDown() {
-
+        //Free the repository after every test case
         trackRepository.deleteAll();
     }
 
@@ -79,7 +90,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void givenTracksShouldReturnAllTracks() {
+    public void givenTracksShouldReturnListOfAllTracks() {
         //act
         Track track1 = new Track(1, "Music track1", "comment1");
         Track track2 = new Track(2, "Music track2", "comment2");
@@ -97,7 +108,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void givenTracksShouldReturnAllTracksFailure() {
+    public void givenTracksShouldReturnListOfAllTracksFailure() {
         Track track1 = new Track(1, "Music track1", "comment1");
         Track track2 = new Track(2, "Music track2", "comment2");
         trackRepository.save(track1);
