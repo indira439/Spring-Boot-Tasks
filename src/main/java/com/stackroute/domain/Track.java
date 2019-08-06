@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-//
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
+
 
 /**Entity annotated class will have the ability to represent objects in the database*/
 @Document(collection = "tracks")
@@ -28,7 +26,7 @@ public class Track {
 //    public Track() {
 //
 //    }
-
+//
 //    public Track(int id, String trackName, String comments) {
 //        this.id = id;
 //        this.trackName = trackName;
@@ -40,7 +38,7 @@ public class Track {
     private int id;
     private String trackName;
     private String comments;
-
+//
 //    public int getId() {
 //        return id;
 //    }
@@ -63,5 +61,14 @@ public class Track {
 //
 //    public void setComments(String comments) {
 //        this.comments = comments;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Track{" +
+//                "id=" + id +
+//                ", trackName='" + trackName + '\'' +
+//                ", comments='" + comments + '\'' +
+//                '}';
 //    }
 }
