@@ -5,6 +5,7 @@ import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.service.TrackService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -54,7 +54,7 @@ public class TrackControllerTest {
     /**
      * Run this before each test case
      */
-    private List<Track> list = null;
+    private List<Track> list;
 
     @Before
     public void setUp() {
@@ -70,8 +70,14 @@ public class TrackControllerTest {
         list.add(track);
     }
 
+    @After
+    public void tearDown() {
+        this.track=null;
+        this.list=null;
+    }
+
     @Test
-    public void givenUrlShouldReturnTheSavedTrack() throws Exception {
+    public void givenPostMappingUrlShouldReturnTheSavedTrack() throws TrackAlreadyExistsException,Exception {
         when(trackService.saveTrack(any())).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))

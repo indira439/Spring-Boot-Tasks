@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 public class TrackServiceTest {
 
     private Track track;
+    private List<Track> expectedTrackList;
 
     /**
      * Create a mock for TrackRepository
@@ -36,7 +37,9 @@ public class TrackServiceTest {
     @InjectMocks
     TrackServiceImplements trackServiceImplements;
 
-    /**Run this before each test case*/
+    /**
+     * Run this before each test case
+     */
     @Before
     public void setUp() {
         //Initialising the mock object
@@ -45,11 +48,17 @@ public class TrackServiceTest {
         track.setId(1);
         track.setTrackName("Music track1");
         track.setComments("Music comment1");
+        expectedTrackList = new ArrayList<>();
+    }
 
+    @After
+    public void tearDown() {
+        this.track = null;
+        this.expectedTrackList = null;
     }
 
     @Test
-    public void givenTrackShouldSaveTrack() throws TrackAlreadyExistsException {
+    public void givenTrackToSaveShouldReturnSavedTrack() throws TrackAlreadyExistsException {
         //act
         when(trackRepository.save((Track) any())).thenReturn(track);
         Track savedTrack = trackServiceImplements.saveTrack(track);
@@ -83,38 +92,54 @@ public class TrackServiceTest {
     }
 
     @Test(expected = TrackNotFoundException.class)
-    public void givenInvalidIdShouldReturnTrackNotFoundException() throws TrackNotFoundException {
+    public void givenNotExistingTrackIdShouldReturnTrackNotFoundException() throws TrackNotFoundException {
         trackServiceImplements.getTrackById(100);
     }
 
     @Test
-    public void givenTracksShouldReturnAllTracks() {
+    public void givenMethodCallToGetAllTracksShouldReturnAllTracks() throws Exception {
         //act
-        List<Track> expectedList = new ArrayList<>();
-        expectedList.add(track);
+        expectedTrackList.add(track);
         //stubbing the mock to return specific data
-        when(trackRepository.findAll()).thenReturn(expectedList);
-        List<Track> trackList = trackServiceImplements.getAllTracks();
+        when(trackRepository.findAll()).thenReturn(expectedTrackList);
+        List<Track> actualTrackList = trackServiceImplements.getAllTracks();
         //assert
-        Assert.assertEquals(expectedList, trackList);
+        Assert.assertEquals(expectedTrackList, actualTrackList);
 
-        //verify here verifies that trackRepository findById method is only called once
+        //verify here verifies that trackRepository findAll method is only called once
         verify(trackRepository, times(1)).findAll();
     }
 
     @Test
-    public void givenTrackIdShouldDeleteThatTrackANdReturnRemainingTracks() throws TrackNotFoundException {
+    public void givenMethodCallToDeleteAllTracksShouldReturnTrue() throws Exception {
+        //act
+        expectedTrackList.add(track);
+        //stubbing the mock to return specific data
+        when(trackRepository.findAll()).thenReturn(expectedTrackList);
+        boolean boo = trackServiceImplements.deleteAllTracks();
+        //assert
+        Assert.assertEquals(true, boo);
+
+        //verify here verifies that trackRepository findAll method is only called once
+        verify(trackRepository, times(1)).findAll();
+    }
+
+
+    @Test
+    public void givenTrackIdShouldDeleteThatTrackANdReturnDeletedTrack() throws TrackNotFoundException {
         //act
         when(trackRepository.existsById(track.getId())).thenReturn(true);
         when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
         trackServiceImplements.deleteTrackById(track.getId());
-        List<Track> expectedResult = new ArrayList<>();
         //assert
-        Assert.assertEquals(expectedResult, trackServiceImplements.getAllTracks());
+        Assert.assertEquals(track, trackServiceImplements.getTrackById(track.getId()));
+
+        //verify here verifies that trackRepository deleteById method is only called once
+        verify(trackRepository, times(1)).deleteById(track.getId());
     }
 
     @Test
-    public void givenTrackShouldReturnUpdatedTrack() throws TrackNotFoundException {
+    public void givenTrackToUpdateShouldReturnUpdatedTrack() throws TrackNotFoundException {
         //act
         when(trackRepository.existsById(track.getId())).thenReturn(true);
         when(trackRepository.findById(track.getId())).thenReturn(Optional.of(track));
@@ -122,17 +147,22 @@ public class TrackServiceTest {
         Track track1 = new Track(1, "Music track1", "Updated comment");
         //assert
         Assert.assertEquals(track1, track);
+
+        //verify here verifies that trackRepository findById method is only called once
+        verify(trackRepository, times(1)).findById(track.getId());
     }
 
     @Test
     public void givenTrackNameShouldReturnListOfTracksWithThatTrackName() throws TrackNotFoundException {
         //act
-        List<Track> trackList = new ArrayList<>();
-        trackList.add(track);
-        when(trackRepository.findBytrackName(track.getTrackName())).thenReturn(trackList);
+        expectedTrackList.add(track);
+        when(trackRepository.findBytrackName(track.getTrackName())).thenReturn(expectedTrackList);
         List<Track> actualTrackList = trackServiceImplements.getTrackByName(track.getTrackName());
         //assert
-        Assert.assertEquals(trackList, actualTrackList);
+        Assert.assertEquals(expectedTrackList, actualTrackList);
+
+        //verify here verifies that trackRepository findBytrackName method is only called once
+        verify(trackRepository, times(1)).findBytrackName(track.getTrackName());
     }
 
     @Test(expected = TrackNotFoundException.class)

@@ -51,6 +51,7 @@ public class TrackRepositoryTest {
     public void tearDown() {
         //Free the repository after every test case
         trackRepository.deleteAll();
+        this.track=null;
     }
 
 
@@ -108,7 +109,7 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void givenTracksShouldReturnListOfAllTracksFailure() {
+    public void givenMethodCallToGetAllTracksShouldReturnListOfAllTracksFailure() {
         Track track1 = new Track(1, "Music track1", "comment1");
         Track track2 = new Track(2, "Music track2", "comment2");
         trackRepository.save(track1);
@@ -126,27 +127,43 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void givenTrackIdShouldDeleteTrackWithThatIdAndReturnRemainingTracks() {
+    public void givenTrackIdTODeleteShouldReturnDeletedTrack() {
         //act
         trackRepository.deleteById(track.getId());
-        List<Track> expectedResult = new ArrayList<>();
         //assert
-        Assert.assertEquals(expectedResult, trackRepository.findAll());
+        Assert.assertEquals(track, trackRepository.findById(track.getId()));
 
     }
 
     @Test
-    public void givenTrackIdShouldDeleteTrackWithThatIdAndReturnRemainingTracksFailure() {
+    public void givenTrackIdShouldDeleteTrackWithThatIdAndReturnDeletedTrackFailure() {
         //act
         trackRepository.deleteById(track.getId());
-        List<Track> expectedResult = new ArrayList<>();
         //assert
-        Assert.assertNotSame(" ", trackRepository.findAll());
+        Assert.assertNotSame(" ", trackRepository.findById(track.getId()));
 
     }
 
     @Test
-    public void givenTrackIdShouldReturnUpdatedTrack() {
+    public void givenMethodCallToDeleteAllTracksShouldReturnTrue() {
+        //act
+       trackRepository.deleteAll();
+        //assert
+        Assert.assertEquals(true,trackRepository.findAll().isEmpty());
+
+    }
+
+    @Test
+    public void givenMethodCallToDeleteAllTracksShouldReturnFalse() {
+        //act
+        trackRepository.deleteAll();
+        //assert
+        Assert.assertEquals(false,!(trackRepository.findAll().isEmpty()));
+
+    }
+
+    @Test
+    public void givenTrackShouldReturnUpdatedTrack() {
         //act
         trackRepository.save(track);
         Track getTrack = trackRepository.findById(track.getId()).get();
