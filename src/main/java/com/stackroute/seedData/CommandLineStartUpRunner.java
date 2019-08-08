@@ -2,7 +2,6 @@ package com.stackroute.seedData;
 
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
-import com.stackroute.repository.TrackRepository;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,11 +14,7 @@ public class CommandLineStartUpRunner implements CommandLineRunner {
     private TrackService trackService;
 
     /**
-     * Use constructor based DI to inject TrackRepository here
-     */
-
-    /**
-     * @Qualifier annotation is used to resolve the auto wiring conflict, when there are multiple beans of same type
+     * Use constructor based DI to inject TrackService here
      */
     @Autowired
     private CommandLineStartUpRunner(TrackService trackService) {

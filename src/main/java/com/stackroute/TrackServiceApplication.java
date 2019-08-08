@@ -11,6 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 /**Enable swagger support in the class*/
 @EnableSwagger2
+/**To use the properties from the properties file defined in propertySource*/
 @PropertySource("application-mongo.properties")
 public class TrackServiceApplication {
 

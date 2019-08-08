@@ -30,12 +30,16 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
     }
 
 
-    /**Using Environment to get the property values*/
+    /**
+     * Using Environment to get the property values
+     */
     @Autowired
     private Environment environment;
 
 
-    /**To get the property values*/
+    /**
+     * To get the property values
+     */
     @Value("${id}")
     int id;
 
