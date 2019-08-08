@@ -5,16 +5,26 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Service indicates annotated class is a service which hold business logic in the Service layer
  */
 @Service
+/**
+ * @Profile is to handle application configuration
+ */
 @Profile("service")
+/**
+ * use @Primary to give higher preference to a bean when there are multiple beans of the same type.
+ */
+@Primary
 public class TrackServiceImplements implements TrackService {
 
     private TrackRepository trackRepository;
@@ -61,18 +71,26 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of getAllTracks method
      */
     @Override
-    public List<Track> getAllTracks() {
-        return trackRepository.findAll();
+    public List<Track> getAllTracks() throws HttpServerErrorException.InternalServerError {
+        /**Throws Exception if Database connection issue happens*/
+        List<Track> allTracks = trackRepository.findAll();
+        if (allTracks.isEmpty()) {
+            //throw new HttpServerErrorException.InternalServerError();
+        }
+        return allTracks;
     }
 
     /**
      * Implementation of deleteTrackById method
+     *
+     * @return
      */
     @Override
-    public void deleteTrackById(int id) throws TrackNotFoundException {
+    public Optional<Track> deleteTrackById(int id) throws TrackNotFoundException {
         /**Throw TrackNotFoundException if track we want to delete is not found*/
         if (trackRepository.existsById(id)) {
             trackRepository.deleteById(id);
+            return trackRepository.findById(id);
         } else {
             throw new TrackNotFoundException("Track you want to delete is not found");
         }
@@ -82,8 +100,13 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of deleteAllTracks method
      */
     @Override
-    public void deleteAllTracks() {
+    public boolean deleteAllTracks() throws HttpServerErrorException.InternalServerError {
+        /**Throws Exception if Database connection issue happens*/
+        if (trackRepository.findAll().isEmpty()) {
+            return false;
+        }
         trackRepository.deleteAll();
+        return true;
     }
 
 

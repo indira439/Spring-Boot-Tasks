@@ -3,8 +3,10 @@ package com.stackroute.service;
 import com.stackroute.domain.Track;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TrackService {
 
@@ -21,17 +23,18 @@ public interface TrackService {
     /**
      * AbstractMethod to get all tracks
      */
-    public List<Track> getAllTracks();
+    public List<Track> getAllTracks() throws HttpServerErrorException.InternalServerError;
 
     /**
      * AbstractMethod to delete track by Id
+     * @return
      */
-    public void deleteTrackById(int id) throws TrackNotFoundException;
+    public Optional<Track> deleteTrackById(int id) throws TrackNotFoundException;
 
     /**
      * AbstractMethod to delete all tracks
      */
-    public void deleteAllTracks();
+    public boolean deleteAllTracks() throws HttpServerErrorException.InternalServerError;
 
     /**
      * AbstractMethod to update comments of a track by its id
