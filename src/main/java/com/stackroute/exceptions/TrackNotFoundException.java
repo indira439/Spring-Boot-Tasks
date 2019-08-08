@@ -9,7 +9,6 @@ public class TrackNotFoundException extends Exception{
     public TrackNotFoundException() {
     }
 
-
     public TrackNotFoundException(String message) {
         super(message);
         this.message = message;
