@@ -31,8 +31,8 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     /**
      * Handles Internal_Server_Error i.e if database connection fails
      */
-    @ExceptionHandler(value = HttpServerErrorException.InternalServerError.class)
-    public ResponseEntity<Object> internalServerError(HttpServerErrorException.InternalServerError exception) {
+    @ExceptionHandler(value = DatabaseConnectionFailException.class)
+    public ResponseEntity<Object> connectionFailException(HttpServerErrorException.InternalServerError exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
