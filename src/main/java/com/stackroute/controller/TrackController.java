@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class TrackController {
      * PostMapping Annotation for mapping HTTP POST requests onto specific handler methods.
      */
     @PostMapping("track")
-    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException, HttpServerErrorException.InternalServerError {
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException, Exception {
 
         Track savedTrack = trackService.saveTrack(track);
         return new ResponseEntity<>(savedTrack, HttpStatus.CREATED);
@@ -49,14 +48,14 @@ public class TrackController {
      * GetMapping Annotation for mapping HTTP GET requests onto specific handler methods.
      */
     @GetMapping("track/{id}")
-    public ResponseEntity<?> getTrackById(@PathVariable int id) throws TrackNotFoundException, HttpServerErrorException.InternalServerError {
+    public ResponseEntity<?> getTrackById(@PathVariable int id) throws TrackNotFoundException, Exception {
 
         Track retrieveTrackById = trackService.getTrackById(id);
         return new ResponseEntity<>(retrieveTrackById, HttpStatus.FOUND);
     }
 
     @GetMapping("tracks")
-    public ResponseEntity<?> getAllTracks() throws HttpServerErrorException.InternalServerError {
+    public ResponseEntity<?> getAllTracks() throws Exception {
 
         List<Track> retrieveTracks = trackService.getAllTracks();
         return new ResponseEntity<>(retrieveTracks, HttpStatus.FOUND);
@@ -66,31 +65,27 @@ public class TrackController {
      * DeleteMapping Annotation for mapping HTTP Delete requests onto specific handler methods.
      */
     @DeleteMapping("track/{id}")
-    public ResponseEntity<?> deleteTrackById(@PathVariable int id) throws HttpServerErrorException.InternalServerError, TrackNotFoundException {
-
-        trackService.deleteTrackById(id);
-        return new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
+    public ResponseEntity<?> deleteTrackById(@PathVariable int id) throws Exception, TrackNotFoundException {
+        return new ResponseEntity<>(trackService.deleteTrackById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("tracks")
-    public ResponseEntity<?> deleteAllTracks() throws HttpServerErrorException.InternalServerError {
-
-        trackService.deleteAllTracks();
-        return new ResponseEntity<List<Track>>(trackService.getAllTracks(), HttpStatus.OK);
+    public ResponseEntity<?> deleteAllTracks() throws Exception {
+        return new ResponseEntity<>(trackService.deleteAllTracks(), HttpStatus.OK);
     }
 
     /**
      * PutMapping Annotation for mapping HTTP PuT requests onto specific handler methods.
      */
-    @PutMapping("track/{id}")
-    public ResponseEntity<?> UpdateTrackById(@PathVariable int id, @RequestBody Track track) throws TrackNotFoundException, HttpServerErrorException.InternalServerError {
+    @PutMapping("track")
+    public ResponseEntity<?> UpdateTrack(@RequestBody Track track) throws TrackNotFoundException, Exception {
 
-        Track updatedTrack = trackService.updateTrackById(id, track);
+        Track updatedTrack = trackService.updateTrack(track);
         return new ResponseEntity<>(updatedTrack, HttpStatus.OK);
     }
 
     @GetMapping("tracks/{trackName}")
-    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws TrackNotFoundException, HttpServerErrorException.InternalServerError {
+    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws TrackNotFoundException, Exception {
 
         List<Track> retrieveTrackByNAme = trackService.getTrackByName(trackName);
         return new ResponseEntity<>(retrieveTrackByNAme, HttpStatus.FOUND);
