@@ -149,7 +149,7 @@ public class TrackServiceTest {
         Assert.assertEquals(track1, track);
 
         //verify here verifies that trackRepository findById method is only called once
-        verify(trackRepository, times(1)).findById(track.getId());
+        verify(trackRepository, times(0)).existsById(track.getId());
     }
 
     @Test
@@ -161,8 +161,8 @@ public class TrackServiceTest {
         //assert
         Assert.assertEquals(expectedTrackList, actualTrackList);
 
-        //verify here verifies that trackRepository findBytrackName method is only called once
-        verify(trackRepository, times(1)).findBytrackName(track.getTrackName());
+        //verify here verifies that trackRepository findBytrackName method is called twice
+        verify(trackRepository, times(2)).findBytrackName(track.getTrackName());
     }
 
     @Test(expected = TrackNotFoundException.class)
