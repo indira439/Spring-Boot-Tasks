@@ -127,16 +127,17 @@ public class TrackRepositoryTest {
     }
 
     @Test
-    public void givenTrackIdTODeleteShouldReturnDeletedTrack() {
+    public void givenTrackIdTODeleteShouldDeleteTheTrack() {
         //act
         trackRepository.deleteById(track.getId());
+        List expectedResult = new ArrayList();
         //assert
-        Assert.assertEquals(track, trackRepository.findById(track.getId()));
+        Assert.assertEquals(expectedResult,trackRepository.findAll());
 
     }
 
     @Test
-    public void givenTrackIdShouldDeleteTrackWithThatIdAndReturnDeletedTrackFailure() {
+    public void givenTrackIdShouldDeleteTrackFailure() {
         //act
         trackRepository.deleteById(track.getId());
         //assert
