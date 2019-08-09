@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,13 +70,10 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of getAllTracks method
      */
     @Override
-    public List<Track> getAllTracks() throws HttpServerErrorException.InternalServerError {
+    public List<Track> getAllTracks() throws Exception {
         /**Throws Exception if Database connection issue happens*/
-        List<Track> allTracks = trackRepository.findAll();
-        if (allTracks.isEmpty()) {
-            //throw new HttpServerErrorException.InternalServerError();
-        }
-        return allTracks;
+        trackRepository.findAll();
+        return trackRepository.findAll();
     }
 
     /**
@@ -89,8 +85,10 @@ public class TrackServiceImplements implements TrackService {
     public Optional<Track> deleteTrackById(int id) throws TrackNotFoundException {
         /**Throw TrackNotFoundException if track we want to delete is not found*/
         if (trackRepository.existsById(id)) {
+            Optional<Track> deletedTrack = trackRepository.findById(id);
+            ;
             trackRepository.deleteById(id);
-            return trackRepository.findById(id);
+            return deletedTrack;
         } else {
             throw new TrackNotFoundException("Track you want to delete is not found");
         }
@@ -100,7 +98,7 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of deleteAllTracks method
      */
     @Override
-    public boolean deleteAllTracks() throws HttpServerErrorException.InternalServerError {
+    public boolean deleteAllTracks() throws Exception {
         /**Throws Exception if Database connection issue happens*/
         if (trackRepository.findAll().isEmpty()) {
             return false;
@@ -114,10 +112,10 @@ public class TrackServiceImplements implements TrackService {
      * Implementation of updateTrack method
      */
     @Override
-    public Track updateTrackById(int id, Track track) throws TrackNotFoundException {
+    public Track updateTrack(Track track) throws TrackNotFoundException {
         /**Throw TrackNotFoundException if track we want to update is not found*/
-        if (trackRepository.existsById(id)) {
-            Track getTrack = trackRepository.findById(id).get();
+        if (trackRepository.existsById(track.getId())) {
+            Track getTrack = trackRepository.findById(track.getId()).get();
             getTrack.setComments(track.getComments());
             return trackRepository.save(getTrack);
         } else {

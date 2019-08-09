@@ -44,7 +44,7 @@ public class TrackDummyServiceImpl implements TrackService {
     }
 
     @Override
-    public Track updateTrackById(int id, Track track) throws TrackNotFoundException {
+    public Track updateTrack(Track track) throws TrackNotFoundException {
         System.out.println("Update track by Id");
         return null;
     }

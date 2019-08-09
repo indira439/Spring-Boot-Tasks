@@ -23,7 +23,7 @@ public interface TrackService {
     /**
      * AbstractMethod to get all tracks
      */
-    public List<Track> getAllTracks() throws HttpServerErrorException.InternalServerError;
+    public List<Track> getAllTracks() throws Exception;
 
     /**
      * AbstractMethod to delete track by Id
@@ -34,12 +34,12 @@ public interface TrackService {
     /**
      * AbstractMethod to delete all tracks
      */
-    public boolean deleteAllTracks() throws HttpServerErrorException.InternalServerError;
+    public boolean deleteAllTracks() throws Exception;
 
     /**
      * AbstractMethod to update comments of a track by its id
      */
-    public Track updateTrackById(int id, Track track) throws TrackNotFoundException;
+    public Track updateTrack(Track track) throws TrackNotFoundException;
 
     /**
      * AbstractMethod to get track by Name
