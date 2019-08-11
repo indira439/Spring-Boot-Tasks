@@ -4,9 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 
 /**
  * @ControllerAdvice annotation provided by Spring allows you to write global
@@ -16,13 +14,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalException extends ResponseEntityExceptionHandler {
 
     /**
-     * Handles exception thrown by service class
+     * Handles TrackNotFound exception
      */
     @ExceptionHandler(value = TrackNotFoundException.class)
     public ResponseEntity<Object> notFoundException(TrackNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles TrackAlreadyExistsException
+     */
     @ExceptionHandler(value = TrackAlreadyExistsException.class)
     public ResponseEntity<Object> alreadyExistsException(TrackAlreadyExistsException exception) {
         return new ResponseEntity<>("Track already exists", HttpStatus.CONFLICT);
@@ -32,8 +33,8 @@ public class GlobalException extends ResponseEntityExceptionHandler {
      * Handles Internal_Server_Error i.e if database connection fails
      */
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Object> connectionFailException(HttpServerErrorException.InternalServerError exception) {
+    public ResponseEntity<Object> databaseConnectionFailsException(Exception exception) {
         return new ResponseEntity<>("Database connectivity is lost", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
+

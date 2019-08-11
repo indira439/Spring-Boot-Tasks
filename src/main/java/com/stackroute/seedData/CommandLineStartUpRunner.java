@@ -25,7 +25,7 @@ public class CommandLineStartUpRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         /**Pre-fill the database whenever application starts*/
         try {
-            Track track10 = new Track(1, "Music Tracks", "comments");
+            Track track10 = new Track(1, "Gonna sing", "Bad music");
             trackService.saveTrack(track10);
         } catch (TrackAlreadyExistsException exception) {
             exception.printStackTrace();
