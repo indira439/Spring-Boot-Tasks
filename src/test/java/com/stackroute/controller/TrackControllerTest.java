@@ -2,6 +2,7 @@ package com.stackroute.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.GlobalException;
 import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.service.TrackService;
@@ -24,18 +25,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @RunWith(SpringRunner.class) is used to provide a bridge between Spring Boot test features and JUnit
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class TrackControllerTest {
 
+public class TrackControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -54,160 +56,188 @@ public class TrackControllerTest {
     /**
      * Run this before each test case
      */
-    private List<Track> list;
+    private List<Track> list = null;
 
     @Before
     public void setUp() {
         //Initialising the mock object
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(trackController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(trackController).setControllerAdvice(new GlobalException()).build();
         //act
         track = new Track();
-        track.setId(1);
-        track.setTrackName("Music track1");
-        track.setComments("Music comment1");
+        track.setId(100);
+        track.setTrackName("Music track100");
+        track.setComments("Music comment100");
         list = new ArrayList<>();
         list.add(track);
     }
 
     @After
     public void tearDown() {
-        this.track=null;
-        this.list=null;
+        this.track = null;
+        this.list = null;
     }
 
     @Test
-    public void givenPostMappingUrlShouldReturnTheSavedTrack() throws TrackAlreadyExistsException,Exception {
+    public void givenPostMappingUrlShouldReturnTheSavedTrack() throws Exception {
         when(trackService.saveTrack(any())).thenReturn(track);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
 
+        //verify here verifies that trackService saveTrack method is only called once
+        verify(trackService, times(1)).saveTrack(track);
+
     }
 
     @Test
-    public void givenUrlAndTrackShouldThrowTrackAlreadyException() throws TrackAlreadyExistsException, Exception {
+    public void givenPostMappingUrlAndTrackShouldThrowTrackAlreadyException() throws Exception {
         when(trackService.saveTrack(any())).thenThrow(TrackAlreadyExistsException.class);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isConflict())
                 .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService saveTrack method is only called once
+        verify(trackService, times(1)).saveTrack(track);
     }
 
     @Test
-    public void givenUrlAndTrackShouldReturnInternalServerError() throws TrackAlreadyExistsException, Exception {
-        when(trackService.saveTrack(any())).thenThrow(Exception.class);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/track")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void givenUrlShouldReturnListOfAllTracks() throws Exception {
+    public void givenGetMappingUrlShouldReturnListOfAllTracks() throws Exception {
         when(trackService.getAllTracks()).thenReturn(list);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andDo(MockMvcResultHandlers.print());
 
-    }
-
-    @Test
-    public void givenUrlShouldReturnException() throws Exception {
-        when(trackService.getAllTracks()).thenThrow(Exception.class);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andDo(MockMvcResultHandlers.print());
+        //verify here verifies that trackService getAllTracks method is only called once
+        verify(trackService, times(1)).getAllTracks();
 
     }
 
     @Test
-    public void givenUrlWithIdShouldReturnTrackOfThatId() throws TrackNotFoundException, Exception {
+    public void givenGetMappingUrlWithIdShouldReturnTrackWIthThatThatId() throws Exception {
         when(trackService.getTrackById(anyInt())).thenReturn(track);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/1")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isFound())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void givenUrlAndIdShouldReturnTrackNotFoundException() throws TrackNotFoundException, Exception {
-        when(trackService.getTrackById(anyInt())).thenThrow(TrackNotFoundException.class);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/100")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isFound())
                 .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService getTrackById method is only called once
+        verify(trackService, times(1)).getTrackById(track.getId());
     }
 
     @Test
-    public void givenUrlWithIdShouldReturnInternalServerError() throws TrackNotFoundException, Exception {
-        when(trackService.getTrackById(anyInt())).thenThrow(Exception.class);
+    public void givenGetMappingUrlAndIdShouldThrowTrackNotFoundException() throws Exception {
+        when(trackService.getTrackById(anyInt())).thenThrow(TrackNotFoundException.class);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/track/200")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService getTrackById method is not called even once
+        verify(trackService, times(0)).getTrackById(track.getId());
     }
 
+
     @Test
-    public void givenUrlWithTrackNameShouldReturnTrack() throws TrackNotFoundException, Exception {
+    public void givenGetMappingUrlWithTrackNameShouldReturnTracksWithThatTrackName() throws Exception {
         when(trackService.getTrackByName(any())).thenReturn(list);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/Music")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/Music track100")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isFound())
                 .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService getTrackByName method is only called once
+        verify(trackService, times(1)).getTrackByName(track.getTrackName());
     }
 
     @Test
-    public void givenUrlWithNameShouldReturnTrackNotFoundException() throws TrackNotFoundException, Exception {
+    public void givenGetMappingUrlWithTrackNameShouldReturnTrackNotFoundException() throws Exception {
         when(trackService.getTrackByName(any())).thenThrow(TrackNotFoundException.class);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/yedho onnu solluvom")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/Emo emo")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andDo(MockMvcResultHandlers.print());
+        //verify here verifies that trackService getTrackByName method is not called once
+        verify(trackService, times(0)).getTrackByName(track.getTrackName());
     }
 
     @Test
-    public void givenUrlWithTrackNameShouldReturnServerException() throws TrackNotFoundException, Exception {
-        when(trackService.getTrackByName(any())).thenThrow(Exception.class);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/tracks/zzzzz")
+    public void givenPutMappingUrlAndTrackShouldReturnUpdatedTrack() throws Exception {
+        when(trackService.updateTrack(any())).thenReturn(track);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-
-    @Test
-    public void givenUrlAndTrackShouldReturnUpdatedTrack() throws TrackNotFoundException, Exception {
-        when(trackService.updateTrackById(any(), any())).thenReturn(track);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track/")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
+        //verify here verifies that trackService updateTrack method is only called once
+        verify(trackService, times(1)).updateTrack(track);
     }
 
+
     @Test
-    public void givenUrlAndTrackShouldReturnTrackNotFoundException() throws TrackNotFoundException, Exception {
-        when(trackService.updateTrackById(any(), any())).thenThrow(TrackNotFoundException.class);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track/200")
+    public void givenPutMappingUrlAndTrackShouldReturnTrackNotFoundException() throws Exception {
+        when(trackService.updateTrack(any())).thenThrow(TrackNotFoundException.class);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andDo(MockMvcResultHandlers.print());
 
+
+        //verify here verifies that trackService updateTrack method is only called once
+        verify(trackService, times(1)).updateTrack(track);
     }
 
-
     @Test
-    public void givenUrlAndTrackShouldReturnTheServerException() throws TrackNotFoundException, Exception {
-        when(trackService.updateTrackById(any(), any())).thenThrow(Exception.class);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/track/")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+    public void givenDeleteMappingUrlAndTrackIdShouldReturnDeletedTrack() throws Exception {
+        when(trackService.deleteTrackById(anyInt())).thenReturn(Optional.of(track));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/track/100")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
+
+        //verify here verifies that trackService deleteTrackById method is only called once
+        verify(trackService, times(1)).deleteTrackById(track.getId());
+    }
+
+    @Test
+    public void givenDeleteMappingUrlAndTrackIdShouldThrowTrackNotFoundException() throws Exception {
+        when(trackService.deleteTrackById(anyInt())).thenThrow(TrackNotFoundException.class);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/track/200")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService deleteTrackById method is only called once
+        verify(trackService, times(0)).deleteTrackById(track.getId());
+    }
+
+    @Test
+    public void givenDeleteMappingUrlShouldDeleteAllTracksAndReturnTrue() throws Exception {
+        when(trackService.deleteAllTracks()).thenReturn(true);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/tracks")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        //verify here verifies that trackService deleteAllTracks method is only called once
+        verify(trackService, times(1)).deleteAllTracks();
+    }
+
+    @Test
+    public void givenDeleteMappingUrlShouldReturnDeleteAllTracksAndReturnFalse() throws Exception {
+        when(trackService.deleteAllTracks()).thenReturn(false);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/tracks")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+
+        //verify here verifies that trackService deleteAllTracks method is only called once
+        verify(trackService, times(1)).deleteAllTracks();
     }
 
     private static String asJsonString(final Object object) {
