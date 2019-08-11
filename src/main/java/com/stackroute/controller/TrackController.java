@@ -1,8 +1,6 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.Track;
-import com.stackroute.exceptions.TrackAlreadyExistsException;
-import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +35,7 @@ public class TrackController {
      * PostMapping Annotation for mapping HTTP POST requests onto specific handler methods.
      */
     @PostMapping("track")
-    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException, Exception {
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws Exception {
 
         Track savedTrack = trackService.saveTrack(track);
         return new ResponseEntity<>(savedTrack, HttpStatus.CREATED);
@@ -48,7 +46,7 @@ public class TrackController {
      * GetMapping Annotation for mapping HTTP GET requests onto specific handler methods.
      */
     @GetMapping("track/{id}")
-    public ResponseEntity<?> getTrackById(@PathVariable int id) throws TrackNotFoundException, Exception {
+    public ResponseEntity<?> getTrackById(@PathVariable int id) throws Exception {
 
         Track retrieveTrackById = trackService.getTrackById(id);
         return new ResponseEntity<>(retrieveTrackById, HttpStatus.FOUND);
@@ -65,7 +63,7 @@ public class TrackController {
      * DeleteMapping Annotation for mapping HTTP Delete requests onto specific handler methods.
      */
     @DeleteMapping("track/{id}")
-    public ResponseEntity<?> deleteTrackById(@PathVariable int id) throws Exception, TrackNotFoundException {
+    public ResponseEntity<?> deleteTrackById(@PathVariable int id) throws Exception {
         return new ResponseEntity<>(trackService.deleteTrackById(id), HttpStatus.OK);
     }
 
@@ -78,14 +76,14 @@ public class TrackController {
      * PutMapping Annotation for mapping HTTP PuT requests onto specific handler methods.
      */
     @PutMapping("track")
-    public ResponseEntity<?> UpdateTrack(@RequestBody Track track) throws TrackNotFoundException, Exception {
+    public ResponseEntity<?> UpdateTrack(@RequestBody Track track) throws Exception {
 
         Track updatedTrack = trackService.updateTrack(track);
         return new ResponseEntity<>(updatedTrack, HttpStatus.OK);
     }
 
     @GetMapping("tracks/{trackName}")
-    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws TrackNotFoundException, Exception {
+    public ResponseEntity<?> getTrackByName(@PathVariable String trackName) throws Exception {
 
         List<Track> retrieveTrackByNAme = trackService.getTrackByName(trackName);
         return new ResponseEntity<>(retrieveTrackByNAme, HttpStatus.FOUND);

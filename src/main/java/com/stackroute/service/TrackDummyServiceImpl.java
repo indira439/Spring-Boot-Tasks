@@ -5,7 +5,6 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class TrackDummyServiceImpl implements TrackService {
     }
 
     @Override
-    public List<Track> getAllTracks() throws HttpServerErrorException.InternalServerError {
+    public List<Track> getAllTracks() throws Exception {
         System.out.println("Get all tracks");
         return null;
     }
@@ -38,7 +37,7 @@ public class TrackDummyServiceImpl implements TrackService {
     }
 
     @Override
-    public boolean deleteAllTracks() throws HttpServerErrorException.InternalServerError {
+    public boolean deleteAllTracks() throws Exception {
         System.out.println("Delete all tracks");
         return false;
     }
