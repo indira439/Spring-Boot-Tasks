@@ -75,6 +75,7 @@ public class TrackServiceTest {
         when(trackRepository.existsById((track.getId()))).thenReturn(true);
         trackServiceImplements.saveTrack(track);
         trackServiceImplements.saveTrack(track);
+
     }
 
     @Test
@@ -88,6 +89,10 @@ public class TrackServiceTest {
 
         //verify here verifies that trackRepository findById method is only called once
         verify(trackRepository, times(1)).findById(track.getId());
+
+        //verify here verifies that trackRepository existsById method is only called once
+        verify(trackRepository, times(1)).existsById(track.getId());
+
 
     }
 
@@ -106,8 +111,6 @@ public class TrackServiceTest {
         //assert
         Assert.assertEquals(expectedTrackList, actualTrackList);
 
-        //verify here verifies that trackRepository findAll method is only called once
-        verify(trackRepository, times(1)).findAll();
     }
 
     @Test
@@ -136,6 +139,7 @@ public class TrackServiceTest {
 
         //verify here verifies that trackRepository deleteById method is only called once
         verify(trackRepository, times(1)).deleteById(track.getId());
+
     }
 
     @Test

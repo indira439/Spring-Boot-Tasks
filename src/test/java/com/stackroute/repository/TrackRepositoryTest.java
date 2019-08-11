@@ -51,12 +51,12 @@ public class TrackRepositoryTest {
     public void tearDown() {
         //Free the repository after every test case
         trackRepository.deleteAll();
-        this.track=null;
+        this.track = null;
     }
 
 
     @Test
-    public void givenTrackShouldSaveTrack() {
+    public void givenTrackShouldSaveThatTrack() {
         //assert
         Assert.assertEquals(track, trackRepository.save(track));
 
@@ -132,7 +132,7 @@ public class TrackRepositoryTest {
         trackRepository.deleteById(track.getId());
         List expectedResult = new ArrayList();
         //assert
-        Assert.assertEquals(expectedResult,trackRepository.findAll());
+        Assert.assertEquals(expectedResult, trackRepository.findAll());
 
     }
 
@@ -148,9 +148,9 @@ public class TrackRepositoryTest {
     @Test
     public void givenMethodCallToDeleteAllTracksShouldReturnTrue() {
         //act
-       trackRepository.deleteAll();
+        trackRepository.deleteAll();
         //assert
-        Assert.assertEquals(true,trackRepository.findAll().isEmpty());
+        Assert.assertEquals(true, trackRepository.findAll().isEmpty());
 
     }
 
@@ -159,7 +159,7 @@ public class TrackRepositoryTest {
         //act
         trackRepository.deleteAll();
         //assert
-        Assert.assertEquals(false,!(trackRepository.findAll().isEmpty()));
+        Assert.assertEquals(false, !(trackRepository.findAll().isEmpty()));
 
     }
 
