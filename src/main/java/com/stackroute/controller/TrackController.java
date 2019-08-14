@@ -21,7 +21,7 @@ import java.util.List;
 public class TrackController {
 
     @Autowired
-    public TrackService trackService;
+    private TrackService trackService;
 
     /**
      * Constructor based Dependency injection to inject TrackService into controller

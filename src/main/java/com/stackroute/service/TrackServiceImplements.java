@@ -78,15 +78,12 @@ public class TrackServiceImplements implements TrackService {
 
     /**
      * Implementation of deleteTrackById method
-     *
-     * @return
-     */
+     **/
     @Override
     public Optional<Track> deleteTrackById(int id) throws TrackNotFoundException {
         /**Throw TrackNotFoundException if track we want to delete is not found*/
         if (trackRepository.existsById(id)) {
             Optional<Track> deletedTrack = trackRepository.findById(id);
-            ;
             trackRepository.deleteById(id);
             return deletedTrack;
         } else {
